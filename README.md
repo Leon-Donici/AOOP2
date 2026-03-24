@@ -33,8 +33,8 @@ dotnet test
 
 | Role | Username | Password |
 |------|----------|----------|
-| Member | `member` | `password` |
-| Librarian | `admin` | `password` |
+| Member | `member` | `abc123` |
+| Librarian | `admin` | `abc123` |
 
 ## Project Structure
 
