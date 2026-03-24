@@ -45,14 +45,14 @@
     {
       "id": "9683ef52-7bbe-4f65-88a8-77df78ed361d",
       "username": "member",
-      "passwordHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+      "passwordHash": "6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090",
       "fullName": "John Doe",
       "role": "Member"
     },
     {
       "id": "09c224d1-51d9-462c-ac67-5632e21df085",
       "username": "admin",
-      "passwordHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+      "passwordHash": "6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090",
       "fullName": "Jane Admin",
       "role": "Librarian"
     }
@@ -66,6 +66,16 @@
       "returnDate": "2026-03-24T00:00:00",
       "bookTitle": "The Great Gatsby",
       "bookAuthor": "F. Scott Fitzgerald",
+      "memberName": "John Doe"
+    },
+    {
+      "id": "43664374-35a7-43f1-b7c0-1e382bead088",
+      "bookId": "167850e9-2196-4237-b931-dfa494e84ecf",
+      "memberId": "9683ef52-7bbe-4f65-88a8-77df78ed361d",
+      "borrowDate": "2026-03-24T00:00:00",
+      "returnDate": "2026-03-24T00:00:00",
+      "bookTitle": "1984",
+      "bookAuthor": "George Orwell",
       "memberName": "John Doe"
     }
   ]
