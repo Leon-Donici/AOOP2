@@ -1,0 +1,163 @@
+===============================================================================
+                    FUNCTIONAL TESTING RESULTS
+            Library Management App - Manual Test Report
+===============================================================================
+
+Date: 2026-03-24
+Tester: Team
+
+===============================================================================
+1. MEMBER FUNCTIONALITY TESTS
+===============================================================================
+
+Test 1.1: Borrowing Test
+-------------------------
+Steps:
+  1. Login as member/password
+  2. Navigate to "Library Catalog" tab
+  3. Select a book from the list
+  4. Click "Borrow This Book"
+Expected: Book appears in "My Loans" tab, disappears from available catalog
+Result: PASS
+  - Book moved from catalog to My Loans
+  - Status message confirms: "Successfully borrowed [title]!"
+  - Book no longer visible in available books list
+
+Test 1.2: Return Book Test
+----------------------------
+Steps:
+  1. Login as member/password
+  2. Borrow a book first (see Test 1.1)
+  3. Navigate to "My Loans" tab
+  4. Click "Return" next to the borrowed book
+Expected: Book disappears from My Loans, status updates to Available in catalog
+Result: PASS
+  - Book removed from active loans list
+  - Book reappears in Library Catalog as available
+  - Borrowing history entry created with return date
+  - Status message confirms: "Successfully returned [title]!"
+
+===============================================================================
+2. LIBRARIAN FUNCTIONALITY TESTS
+===============================================================================
+
+Test 2.1: Add Book Test
+-------------------------
+Steps:
+  1. Login as admin/password
+  2. Navigate to "Manage Catalog" tab
+  3. Fill in Title, Author, ISBN, Description fields
+  4. Click "Add New Book"
+Expected: New book appears in librarian's catalog and member's catalog
+Result: PASS
+  - Book appears in librarian's full catalog immediately
+  - Book is also visible to members in Library Catalog after login
+  - Status message confirms: "Book [title] added successfully!"
+
+Test 2.2: Delete Book Test
+----------------------------
+Steps:
+  1. Login as admin/password
+  2. Navigate to "Manage Catalog" tab
+  3. Select a book (that is not currently borrowed)
+  4. Click "Delete Selected"
+Expected: Book removed from all catalog views
+Result: PASS
+  - Book removed from librarian's catalog
+  - Book no longer visible to members
+  - If book has active loan, deletion is blocked with message:
+    "Cannot delete [title] -- it has an active loan."
+
+Test 2.3: Active Loan Tracking
+-------------------------------
+Steps:
+  1. Login as member/password, borrow 1-2 books, logout
+  2. Login as admin/password
+  3. Navigate to "Active Loans" tab
+Expected: All borrowed books shown with member names
+Result: PASS
+  - DataGrid shows Book Title, Author, Borrowed By (member name), Borrow Date
+  - Total borrowed count displayed: "Total books currently borrowed: N"
+
+===============================================================================
+3. SYSTEM-LEVEL TESTS
+===============================================================================
+
+Test 3.1: Login Test
+---------------------
+Steps:
+  1. Launch application
+  2. Try login with member/password -> should go to Member interface
+  3. Logout, try login with admin/password -> should go to Librarian interface
+  4. Try login with wrong credentials -> should show error
+Expected: Correct role-based routing and error messages
+Result: PASS
+  - member/password -> Member dashboard with blue header, Catalog + My Loans tabs
+  - admin/password -> Librarian dashboard with orange header, Manage Catalog + Active Loans tabs
+  - Wrong credentials -> "Invalid username or password." error shown
+  - Empty fields -> "Please enter both username and password." error shown
+
+Test 3.2: Search/Filter Test
+------------------------------
+Steps:
+  1. Login as member/password
+  2. Type a title or author in the search bar
+  3. Click "Search"
+Expected: Displayed list filters to matching books
+Result: PASS
+  - Searching "Gatsby" returns only "The Great Gatsby"
+  - Searching "Orwell" returns only "1984"
+  - Case-insensitive: "gatsby" matches "The Great Gatsby"
+  - Empty search shows all available books
+  - Also works in librarian's Manage Catalog tab
+
+Test 3.3: Data Persistence Test
+---------------------------------
+Steps:
+  1. Login as admin/password, add a new book "Test Persist"
+  2. Click "Save" button in top bar
+  3. Close the application
+  4. Reopen the application
+  5. Login as admin/password, verify "Test Persist" is still there
+Expected: Changes persist across app restarts
+Result: PASS
+  - Data saved to library-data.json file
+  - On restart, all books, users, and loans are preserved
+  - Auto-saves on application shutdown
+  - Manual Save/Load buttons work correctly
+
+===============================================================================
+4. BONUS FEATURE TESTS
+===============================================================================
+
+Test 4.1: Password Hashing
+----------------------------
+Steps:
+  1. Open library-data.json
+  2. Check passwordHash fields
+Expected: Passwords stored as SHA-256 hashes, not plaintext
+Result: PASS
+  - All passwords stored as 64-character hex strings (SHA-256)
+  - No plaintext passwords in JSON file
+
+Test 4.2: Borrowing History
+-----------------------------
+Steps:
+  1. Login as member/password
+  2. Borrow and return a book
+  3. Check "My Loans" tab -> Borrowing History section
+Expected: Returned books appear in history with borrow/return dates
+Result: PASS
+  - History shows Book Title, Author, Borrow Date, Return Date
+  - Only returned (completed) loans appear in history
+  - Active loans shown separately above
+
+===============================================================================
+SUMMARY
+===============================================================================
+
+Total Tests: 9
+Passed:      9
+Failed:      0
+
+All functional requirements verified and working correctly.

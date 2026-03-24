@@ -1,0 +1,173 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LibraryManagementApp.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="960" d:DesignHeight="600"
+             x:Class="LibraryManagementApp.Views.LibrarianView"
+             x:DataType="vm:LibrarianViewModel">
+
+    <DockPanel>
+        <!-- Header bar -->
+        <Border DockPanel.Dock="Top" Background="#E65100" Padding="16,12">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="Logout"
+                        Command="{Binding LogoutCommand}"
+                        Padding="14,7" FontSize="13"/>
+                <TextBlock Text="{Binding WelcomeMessage}"
+                           FontSize="16" FontWeight="SemiBold"
+                           Foreground="White" VerticalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Status bar -->
+        <Border DockPanel.Dock="Bottom" Padding="16,8"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding StatusMessage}" FontSize="13"
+                       Foreground="#2e7d32" FontWeight="SemiBold"/>
+        </Border>
+
+        <!-- Tabs -->
+        <TabControl Margin="12,8,12,4" FontSize="14">
+
+            <!-- ==================== Manage Catalog ==================== -->
+            <TabItem Header="Manage Catalog" FontSize="14">
+                <DockPanel Margin="4,12,4,4">
+                    <!-- Search -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+                        <TextBox Text="{Binding SearchQuery}" Watermark="Search books..."
+                                 Width="420" Padding="10,8" FontSize="13"/>
+                        <Button Content="Search" Command="{Binding SearchCommand}"
+                                Padding="16,8" FontSize="13"/>
+                    </StackPanel>
+
+                    <!-- Add/Edit form (right side) -->
+                    <Border DockPanel.Dock="Right" Width="290"
+                            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                            CornerRadius="6" Padding="16" Margin="12,0,0,0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Add / Edit Book" FontSize="17" FontWeight="Bold"
+                                           Margin="0,0,0,4"/>
+                                <Separator Margin="0,0,0,4"/>
+
+                                <TextBlock Text="Title *" FontSize="12" FontWeight="SemiBold"/>
+                                <TextBox Text="{Binding FormTitle}" Watermark="Book title"
+                                         Padding="8,7" FontSize="13"/>
+
+                                <TextBlock Text="Author *" FontSize="12" FontWeight="SemiBold" Margin="0,6,0,0"/>
+                                <TextBox Text="{Binding FormAuthor}" Watermark="Author name"
+                                         Padding="8,7" FontSize="13"/>
+
+                                <TextBlock Text="ISBN" FontSize="12" FontWeight="SemiBold" Margin="0,6,0,0"/>
+                                <TextBox Text="{Binding FormIsbn}" Watermark="ISBN"
+                                         Padding="8,7" FontSize="13"/>
+
+                                <TextBlock Text="Description" FontSize="12" FontWeight="SemiBold" Margin="0,6,0,0"/>
+                                <TextBox Text="{Binding FormDescription}" Watermark="Description"
+                                         AcceptsReturn="True" Height="90" Padding="8,7"
+                                         TextWrapping="Wrap" FontSize="13"/>
+
+                                <!-- Action buttons -->
+                                <StackPanel Spacing="6" Margin="0,12,0,0">
+                                    <Button Content="Add New Book" Command="{Binding AddBookCommand}"
+                                            IsVisible="{Binding !IsEditing}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="10,10" FontSize="14"
+                                            Classes="accent"/>
+                                    <Button Content="Save Changes" Command="{Binding SaveEditCommand}"
+                                            IsVisible="{Binding IsEditing}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="10,10" FontSize="14"
+                                            Classes="accent"/>
+                                    <Button Content="Cancel Edit" Command="{Binding CancelEditCommand}"
+                                            IsVisible="{Binding IsEditing}"
+                                            HorizontalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            Padding="10,10" FontSize="13"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Book list + action buttons (fills remaining) -->
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="0,0,0,10">
+                            <Button Content="Edit Selected" Command="{Binding EditBookCommand}"
+                                    Padding="14,8" FontSize="13"/>
+                            <Button Content="Delete Selected" Command="{Binding DeleteBookCommand}"
+                                    Padding="14,8" FontSize="13"/>
+                        </StackPanel>
+
+                        <ListBox ItemsSource="{Binding AllBooks}"
+                                 SelectedItem="{Binding SelectedBook}"
+                                 Padding="2">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <DockPanel Margin="6,8">
+                                        <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center"
+                                                    Margin="12,0,4,0">
+                                            <Border CornerRadius="4" Padding="8,4"
+                                                    Background="#e8f5e9"
+                                                    IsVisible="{Binding IsAvailable}">
+                                                <TextBlock Text="Available" Foreground="#2e7d32"
+                                                           FontSize="12" FontWeight="SemiBold"/>
+                                            </Border>
+                                            <Border CornerRadius="4" Padding="8,4"
+                                                    Background="#ffebee"
+                                                    IsVisible="{Binding !IsAvailable}">
+                                                <TextBlock Text="Borrowed" Foreground="#c62828"
+                                                           FontSize="12" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="{Binding Title}"
+                                                       FontWeight="SemiBold" FontSize="14"/>
+                                            <TextBlock Text="{Binding Author, StringFormat='by {0}'}"
+                                                       FontSize="12.5"
+                                                       Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
+                                            <TextBlock Text="{Binding Isbn, StringFormat='ISBN: {0}'}"
+                                                       FontSize="11"
+                                                       Foreground="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+
+            <!-- ==================== Active Loans ==================== -->
+            <TabItem Header="Active Loans" FontSize="14">
+                <DockPanel Margin="4,12,4,4">
+                    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+                        <TextBlock Text="Active Loans Overview" FontSize="20" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalBorrowedCount, StringFormat='Total books currently borrowed: {0}'}"
+                                   FontSize="14"
+                                   Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                   Margin="0,6,0,0"/>
+                    </StackPanel>
+
+                    <DataGrid ItemsSource="{Binding ActiveLoans}" IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              GridLinesVisibility="Horizontal"
+                              BorderThickness="1"
+                              BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                              CornerRadius="4"
+                              FontSize="13">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Book Title" Binding="{Binding BookTitle}" Width="*"/>
+                            <DataGridTextColumn Header="Author" Binding="{Binding BookAuthor}" Width="*"/>
+                            <DataGridTextColumn Header="Borrowed By" Binding="{Binding MemberName}" Width="*"/>
+                            <DataGridTextColumn Header="Borrow Date" Binding="{Binding BorrowDate, StringFormat='{}{0:yyyy-MM-dd}'}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</UserControl>

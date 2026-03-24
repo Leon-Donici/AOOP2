@@ -1,0 +1,55 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LibraryManagementApp.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
+             x:Class="LibraryManagementApp.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="8" Padding="40,36"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="1"
+                Width="380"
+                BoxShadow="0 4 16 0 #30000000">
+            <StackPanel Spacing="6">
+                <!-- Title -->
+                <TextBlock Text="Library Login" FontSize="26" FontWeight="Bold"
+                           HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <!-- Username -->
+                <TextBlock Text="Username" FontSize="13" Margin="0,0,0,4"/>
+                <TextBox x:Name="UsernameBox" Text="{Binding Username}"
+                         Watermark="Enter username" Padding="10,8"
+                         FontSize="14"/>
+
+                <!-- Password -->
+                <TextBlock Text="Password" FontSize="13" Margin="0,12,0,4"/>
+                <TextBox Text="{Binding Password}" PasswordChar="*"
+                         Watermark="Enter password" Padding="10,8"
+                         FontSize="14"/>
+
+                <!-- Error -->
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="#e53935"
+                           FontSize="12" TextWrapping="Wrap" Margin="0,8,0,0"
+                           IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                <!-- Login button -->
+                <Button Content="Login" Command="{Binding LoginCommand}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Padding="12,12" FontSize="15" FontWeight="SemiBold"
+                        Margin="0,20,0,0"
+                        Classes="accent"/>
+
+                <!-- Hint -->
+                <TextBlock Text="Accounts: member / password, admin / password"
+                           FontSize="11"
+                           Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                           HorizontalAlignment="Center"
+                           TextWrapping="Wrap" Margin="0,16,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
